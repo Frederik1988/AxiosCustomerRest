@@ -17,8 +17,11 @@ import axios, {
     let getOneCustomerButton : HTMLButtonElement = <HTMLButtonElement>document.getElementById("getOneCustomerBtn");
     getOneCustomerButton.addEventListener("click", showOneCustomer);
 
-    let addNewCustomerElement : HTMLButtonElement = <HTMLButtonElement>document.getElementById("addCustomer");
-    addNewCustomerElement.addEventListener("click", addNewCustomer)
+    let addNewCustomerButton : HTMLButtonElement = <HTMLButtonElement>document.getElementById("addCustomer");
+    addNewCustomerButton.addEventListener("click", addNewCustomer);
+
+    let deleteCustomerButton : HTMLButtonElement =<HTMLButtonElement>document.getElementById("deleteCustomer");
+    deleteCustomerButton.addEventListener("click", deleteCustomer);
 
 
     let uri : string = "https://restcustomerservice20181024123050.azurewebsites.net/api/customer/";
@@ -89,7 +92,32 @@ import axios, {
         let newYear : number = +addYearElement.value;
 
         axios.post<ICustomer>(uri, {firstName : newFirstName, lastName : newLastName, year : newYear})
-        .then((response:AxiosResponse) =>{console.log("Response: " +response.status + " " + response.statusText)})
+        .then((response:AxiosResponse) =>{console.log("Response: " + response.status + " " + response.statusText)})
         .catch((error:AxiosError) => {console.log(error);})
+    }
+
+    function deleteCustomer():void{
+        
+        let deleteCustomerElement : HTMLInputElement = <HTMLInputElement>document.getElementById("customerToDelete");
+        let deleteCustomerValue : number = +deleteCustomerElement.value;
+        let customerOutput : HTMLDivElement =<HTMLDivElement>document.getElementById("deletedCustomer");
+
+
+        axios.delete(uri + deleteCustomerValue)
+        .then(function (response: AxiosResponse): void {
+
+            console.log(JSON.stringify(response));
+            customerOutput.innerHTML = response.status + " " + response.statusText;
+        })
+        .catch(function (error: AxiosError): void { 
+            if (error.response) 
+            {                
+                customerOutput.innerHTML = error.message;
+            } else 
+            { 
+                customerOutput.innerHTML = error.message;
+            }
+        });                  
+                
     }
 
