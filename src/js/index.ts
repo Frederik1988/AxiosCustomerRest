@@ -9,10 +9,16 @@ import axios, {
         year:number;
     }
 
-    let showAllCustomerElement : HTMLDivElement = <HTMLDivElement>document.getElementById("content");
+    let showAllCustomerElement : HTMLDivElement = <HTMLDivElement>document.getElementById("allCustomers");
     let getAllCustomersButton : HTMLButtonElement = <HTMLButtonElement>document.getElementById("getAllCustomerBtn");
     getAllCustomersButton.addEventListener("click", showAllCustomers);
-    let uri : string = "https://restcustomerservice20181024123050.azurewebsites.net/api/customer";
+
+    let showOneCustomerElement : HTMLDivElement = <HTMLDivElement>document.getElementById("singleCustomer");
+    let getOneCustomerButton : HTMLButtonElement = <HTMLButtonElement>document.getElementById("getOneCustomerBtn");
+    getOneCustomerButton.addEventListener("click", showOneCustomer);
+
+
+    let uri : string = "https://restcustomerservice20181024123050.azurewebsites.net/api/customer/";
 
     function showAllCustomers():void{
         axios.get<ICustomer[]>(uri)
@@ -29,11 +35,43 @@ import axios, {
                     {
                         result += "<li>" + "<br>" + "<b>Id: </b>" + customer.id.toString() + "<br>" + "<b>Fornavn: </b>" + customer.firstName + "<br>" + "<b>EfterNavn: </b>" + customer.lastName + "<br>" + "<b>Oprettet i: </b>" + customer.year.toString() + "</li>"; 
                     }    
-            });
+            })
 
             result += "</ol>";
             showAllCustomerElement.innerHTML = result;
         })
+        .catch(function (error : AxiosError): void{
+
+            showAllCustomerElement.innerHTML = error.message;            
+    })
     }
 
+    function showOneCustomer():void{
+
+        let showOneCustomerInputElement : HTMLInputElement = <HTMLInputElement>document.getElementById("customerId");
+        let showOneCustomerValue : number  = +showOneCustomerInputElement.value;
+
+        axios.get<ICustomer>(uri + showOneCustomerValue)
+        .then (function(response :AxiosResponse<ICustomer>):void{            
+             
+            let result : string = "<li>";
+            let customer : ICustomer = response.data;  
+            if (customer == null)
+                    {
+                        result
+                         += "Null element"
+                    }
+                else
+                    {
+                        result += "<br>" + "<b>Id: </b>" + customer.id.toString() + "<br>" + "<b>Fornavn: </b>" + customer.firstName + "<br>" + "<b>EfterNavn: </b>" + customer.lastName + "<br>" + "<b>Oprettet i: </b>" + customer.year.toString(); 
+                    }  
+            result += "</li>";
+            showOneCustomerElement.innerHTML = result;         
+        })
+        .catch(function (error : AxiosError): void{
+
+            showOneCustomerElement.innerHTML = error.message;            
+    })
+        
+    }
 
