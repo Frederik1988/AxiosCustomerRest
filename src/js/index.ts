@@ -17,6 +17,9 @@ import axios, {
     let getOneCustomerButton : HTMLButtonElement = <HTMLButtonElement>document.getElementById("getOneCustomerBtn");
     getOneCustomerButton.addEventListener("click", showOneCustomer);
 
+    let addNewCustomerElement : HTMLButtonElement = <HTMLButtonElement>document.getElementById("addCustomer");
+    addNewCustomerElement.addEventListener("click", addNewCustomer)
+
 
     let uri : string = "https://restcustomerservice20181024123050.azurewebsites.net/api/customer/";
 
@@ -73,5 +76,20 @@ import axios, {
             showOneCustomerElement.innerHTML = error.message;            
     })
         
+    }
+
+    function addNewCustomer():void{
+        
+        let addFirstNameElement : HTMLInputElement = <HTMLInputElement>document.getElementById("firstName");
+        let addLastNameElement : HTMLInputElement = <HTMLInputElement>document.getElementById("lastName");
+        let addYearElement : HTMLInputElement = <HTMLInputElement>document.getElementById("year");
+
+        let newFirstName : string = addFirstNameElement.value;
+        let newLastName : string = addLastNameElement.value;
+        let newYear : number = +addYearElement.value;
+
+        axios.post<ICustomer>(uri, {firstName : newFirstName, lastName : newLastName, year : newYear})
+        .then((response:AxiosResponse) =>{console.log("Response: " +response.status + " " + response.statusText)})
+        .catch((error:AxiosError) => {console.log(error);})
     }
 
