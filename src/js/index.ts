@@ -23,8 +23,7 @@ import axios, {
     let deleteCustomerButton : HTMLButtonElement =<HTMLButtonElement>document.getElementById("deleteCustomer");
     deleteCustomerButton.addEventListener("click", deleteCustomer);
 
-
-    let uri : string = "https://restcustomerservice20181024123050.azurewebsites.net/api/customer/";
+    const uri : string = "https://restcustomerservice20181024123050.azurewebsites.net/api/customer/";
 
     function showAllCustomers():void{
         axios.get<ICustomer[]>(uri)
@@ -55,9 +54,9 @@ import axios, {
     function showOneCustomer():void{
 
         let showOneCustomerInputElement : HTMLInputElement = <HTMLInputElement>document.getElementById("customerId");
-        let showOneCustomerValue : number  = +showOneCustomerInputElement.value;
+        let newUri = uri + showOneCustomerInputElement.value;
 
-        axios.get<ICustomer>(uri + showOneCustomerValue)
+        axios.get<ICustomer>(newUri)
         .then (function(response :AxiosResponse<ICustomer>):void{            
              
             let result : string = "<li>";
@@ -99,11 +98,11 @@ import axios, {
     function deleteCustomer():void{
         
         let deleteCustomerElement : HTMLInputElement = <HTMLInputElement>document.getElementById("customerToDelete");
-        let deleteCustomerValue : number = +deleteCustomerElement.value;
-        let customerOutput : HTMLDivElement =<HTMLDivElement>document.getElementById("deletedCustomer");
+        let newUri = uri + deleteCustomerElement.value;
+        let customerOutput : HTMLDivElement = <HTMLDivElement>document.getElementById("deletedCustomer");
 
 
-        axios.delete(uri + deleteCustomerValue)
+        axios.delete(newUri)
         .then(function (response: AxiosResponse): void {
 
             console.log(JSON.stringify(response));
