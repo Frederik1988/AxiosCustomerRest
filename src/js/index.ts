@@ -30,7 +30,7 @@ import axios, {
         axios.get<ICustomer[]>(uri)
         .then(function (response:AxiosResponse<ICustomer[]>):void{
 
-            let result : string = "<ol>";
+            let result : string = "<br>";
             response.data.forEach((customer : ICustomer) =>{
                 if (customer == null)
                     {
@@ -43,7 +43,7 @@ import axios, {
                     }    
             })
 
-            result += "</ol>";
+            result += "</b>";
             showAllCustomerElement.innerHTML = result;
         })
         .catch(function (error : AxiosError): void{
@@ -117,7 +117,7 @@ import axios, {
             { 
                 customerOutput.innerHTML = error.message;
             }
-        });                  
+        });                          
                 
     }
 
